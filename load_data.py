@@ -22,17 +22,15 @@ def save_labels(labels_dir='data/ChinaSet_AllFiles/ClinicalReadings/', n=662):
         pickle.dump(labels, fp)
 
 
-def save_images(imgs_dir='data/ChinaSet_AllFiles/CXR_png/'):
+def save_images(imgs_dir='data/ChinaSet_AllFiles/CXR_png/', img_width=128, img_height=128):
     extensions = {".jpg", ".png", ".gif"}  # etc
-    # file: any(file.endswith(ext) for ext in extensions) for file in files
-    i = 0
     # make sure the file is a image
     imgs_files = [f for f in os.listdir(imgs_dir) if any(f.endswith(ext) for ext in extensions)]
     images = []
     for f in imgs_files:
         # print(f)
         img = cv2.imread(os.path.join(imgs_dir, f), cv2.IMREAD_GRAYSCALE)        # img.shape ~ (2919, 3000)
-        img = cv2.resize(img, (300, 300))
+        img = cv2.resize(img, (img_width, img_height))
         images.append(img)     # Reshape images TODO: Elegir éste valor de resize acorde
     with open("data/images", 'wb') as fp:
         pickle.dump(images, fp)
@@ -45,8 +43,8 @@ def get_labels():
         return pickle.load(fp)
 
 
-def get_images():
+def get_images(imgs_dir='data/ChinaSet_AllFiles/CXR_png/', img_width=128, img_height=128):
     if not os.path.exists("data/images"):
-        save_images()
+        save_images(imgs_dir, img_width, img_height)
     with open("data/images", 'rb') as fp:
         return pickle.load(fp)
