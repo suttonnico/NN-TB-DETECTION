@@ -55,29 +55,44 @@ def get_train_set(img_width=128, img_height=128):
     if not os.path.exists("data/train"):
         generate_train_set(img_width, img_height)
     with open("data/train", 'rb') as fp:
-        return pickle.load(fp)
+        train_set = pickle.load(fp)
+    with open("data/train_labels", 'rb') as fp:
+        train_labels = pickle.load(fp)
+    return train_set, train_labels
 
 
 def get_test_set(img_width=128, img_height=128):
     if not os.path.exists("data/test"):
         generate_train_set(img_width, img_height)
     with open("data/test", 'rb') as fp:
-        return pickle.load(fp)
+        test_set = pickle.load(fp)
+    with open("data/test_labels", 'rb') as fp:
+        test_labels = pickle.load(fp)
+    return test_set, test_labels
 
 
 def generate_train_set(img_width=128, img_height=128):
     images = get_images(img_width=img_width, img_height=img_height)
+    labels = get_labels()
     train_set_percentage = 0.8  # Cuanto porcentaje de las imágenes uso para el train set.
     # normal_cases = [img for i, img in enumerate(images) if labels[i] == 0]
     # ptb_cases = [img for i, img in enumerate(images) if labels[i] == 1]
     train_set = []
+    train_labels = []
     test_set = []
-    for c in images:
+    test_labels = []
+    for i, c in enumerate(images):
         if uniform(0, 1) > train_set_percentage:
             test_set.append(c)
+            test_labels.append(labels[i])
         else:
             train_set.append(c)
+            train_labels.append(labels[i])
     with open("data/train", 'wb') as fp:
         pickle.dump(train_set, fp)
     with open("data/test", 'wb') as fp:
         pickle.dump(test_set, fp)
+    with open("data/train_labels", 'wb') as fp:
+        pickle.dump(train_labels, fp)
+    with open("data/test_labels", 'wb') as fp:
+        pickle.dump(test_labels, fp)
