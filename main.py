@@ -1,5 +1,6 @@
 import load_data as ld
 import cv2
+import random
 # import cnn
 
 # TODO: IDEAS:
@@ -11,13 +12,8 @@ import cv2
 def main():
     print("Opening data & labels")
     labels = ld.get_labels()
-    images = ld.get_images(img_width=300, img_height=300)
-    # cv2.imshow(str(labels[0]), images[0])
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-    train_set_percentage = 0.8  # Cuanto porcentaje de las imágenes uso para el train set.
-    normal_cases = [img for i, img in enumerate(images) if labels[i] == 0]
-    ptb_cases = [img for i, img in enumerate(images) if labels[i] == 1]
+    train_set = ld.get_train_set(img_width=300, img_height=300)
+    test_set = ld.get_test_set(img_width=300, img_height=300)
     import pdb; pdb.set_trace()
     print("Trining Net")
     # my_cnn = cnn.cnn(img_width=300, img_height=300)
