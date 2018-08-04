@@ -1,11 +1,13 @@
 from keras.callbacks import ModelCheckpoint
+from keras.models import load_model
 from sklearn.metrics import confusion_matrix
 import load_data as ld
 import numpy as np
 import cnn
+import os
 
 dict_characters = {0: 'Normal', 1: 'PTB'}
-train = True
+train = False
 # TODO: IDEAS:
 # Subir contraste!
 # Data augmentation
@@ -25,11 +27,15 @@ def main():
     test_labels = reshape(test_labels)
     train_labels = reshape(train_labels)
     train_set = reshape(train_set)
-    print("Trining Net")
-    if train:
-        epochs = 10
-        batch_size = 16
+    print("Open Model")
+    epochs = 10
+    batch_size = 16
+    weights = "weight.hdf5"
+    if os.path.exists(weights):
+        my_cnn = load_model(weights)
+    else:
         my_cnn = cnn.cnn(img_width=128, img_height=128)
+    if train:
         # checkpoint
         filepath = "out/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
         checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
