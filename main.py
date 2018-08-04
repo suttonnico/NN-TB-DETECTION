@@ -5,7 +5,7 @@ import numpy as np
 import cnn
 
 dict_characters = {0: 'Normal', 1: 'PTB'}
-
+train = True
 # TODO: IDEAS:
 # Subir contraste!
 # Data augmentation
@@ -26,24 +26,24 @@ def main():
     train_labels = reshape(train_labels)
     train_set = reshape(train_set)
     print("Trining Net")
-    epochs = 10
-    batch_size = 16
-    my_cnn = cnn.cnn(img_width=128, img_height=128)
-    # checkpoint
-    filepath = "out/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
-    checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-    callbacks_list = [checkpoint]
-    # train
-    history = my_cnn.fit(x=train_set,             # Input should be (train_cases, 128, 128, 1)
-                         y=train_labels,
-                         batch_size=batch_size,
-                         epochs=epochs,
-                         verbose=2,
-                         callbacks=callbacks_list,
-                         validation_data=(test_set, test_labels)
-                         )
-    print("Plot results")
-    cnn.plot_val_acc(history=history)
+    if train:
+        epochs = 10
+        batch_size = 16
+        my_cnn = cnn.cnn(img_width=128, img_height=128)
+        # checkpoint
+        filepath = "out/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
+        checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
+        callbacks_list = [checkpoint]
+        # train
+        history = my_cnn.fit(x=train_set,             # Input should be (train_cases, 128, 128, 1)
+                             y=train_labels,
+                             batch_size=batch_size,
+                             epochs=epochs,
+                             verbose=2,
+                             callbacks=callbacks_list,
+                             validation_data=(test_set, test_labels)
+                             )
+        cnn.plot_val_acc(history=history)
     # Confusion Matrix
     Y_pred = my_cnn.predict_classes(test_set)
     # Y_pred_classes = np.argmax(Y_pred, axis=1)
