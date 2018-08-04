@@ -30,7 +30,7 @@ def main():
     print("Open Model")
     epochs = 10
     batch_size = 16
-    weights = "weight.hdf5"
+    weights = "model.hdf5"
     if os.path.exists(weights):
         my_cnn = load_model(weights)
     else:
