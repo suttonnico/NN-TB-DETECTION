@@ -7,7 +7,7 @@ import cnn
 import os
 
 dict_characters = {0: 'Normal', 1: 'PTB'}
-train = False
+train = True
 # TODO: IDEAS:
 # Subir contraste!
 # Data augmentation
